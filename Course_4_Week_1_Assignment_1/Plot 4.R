@@ -1,0 +1,20 @@
+library(dplyr)
+data<-read.table("household_power_consumption.txt",header = TRUE,sep = ";",stringsAsFactors = FALSE)
+selected<-filter(data, data$Date == "1/2/2007"|data$Date == "2/2/2007")
+DateTime<-paste(selected$Date,selected$Time)
+DateTime<-strptime(DateTime, "%d/%m/%Y %H:%M:%S")
+selected<-cbind(DateTime,selected)
+par(mfcol = c(2,2))
+plot(selected$DateTime,selected$Global_active_power,type = "l", main = "Global Active Power by Day of week",
+        xlab = "Day of week", ylab = "Global Active power")
+with(selected, plot(DateTime,Sub_metering_1, main = "Sub_Metering",xlab = "Day of week",ylab = "Energy Sub Metering", type = "n"))
+lines(selected$DateTime,selected$Sub_metering_1)
+lines(selected$DateTime,selected$Sub_metering_2, col = "red")
+lines(selected$DateTime,selected$Sub_metering_3, col = "blue")
+legend("topright", lty = 1, col = c("black", "red", "blue"), legend = c("Sub_metering_1", "Sub_metering_2","Sub_metering_3"))
+plot(selected$DateTime,selected$Voltage,type = "l", main = "Voltage by Day of week",
+      xlab = "Day of week", ylab = "Voltage")
+plot(selected$DateTime,selected$Global_reactive_power,type = "l", main = "Global reactive power by Day of week",
+      xlab = "Day of week", ylab = "Global reactive power")
+dev.copy(png, file = "Plot 4.png")
+dev.off()

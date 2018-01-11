@@ -1,0 +1,10 @@
+library(dplyr)
+data<-read.table("household_power_consumption.txt",header = TRUE,sep = ";",stringsAsFactors = FALSE)
+selected<-filter(data, data$Date == "1/2/2007"|data$Date == "2/2/2007")
+DateTime<-paste(selected$Date,selected$Time)
+DateTime<-strptime(DateTime, "%d/%m/%Y %H:%M:%S")
+selected<-cbind(DateTime,selected)
+plot(selected$DateTime,selected$Global_active_power,type = "l", main = "Global Active Power by Day of week",
+     xlab = "Day of week", ylab = "Global Active power")
+dev.copy(png, file = "Plot 2.png")
+dev.off()
